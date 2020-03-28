@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion globalConfiguration["compileSdkVersion"]
+    buildToolsVersion globalConfiguration["buildToolsVersion"]
+
+    defaultConfig {
+        applicationId globalConfiguration["applicationId"]
+        minSdkVersion globalConfiguration["minSdkVersion"]
+        targetSdkVersion globalConfiguration["targetSdkVersion"]
+        versionCode globalConfiguration["versionCode"]
+        versionName globalConfiguration["versionName"]
+
+        testInstrumentationRunner globalConfiguration["testInstrumentationRunner"]
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    def appDependencies = rootProject.ext.appDependencies
+    def appTestDependencies = rootProject.ext.appTestDependencies
+
+    //Application
+    implementation appDependencies.kotlin
+    implementation appDependencies.appcompat
+    implementation appDependencies.androidKtx
+    implementation appDependencies.constraintLayout
+    implementation appDependencies.materialComponents
+    implementation appDependencies.kotlinCoroutines
+
+    //Testing
+    testImplementation appTestDependencies.jUnit
+    androidTestImplementation appTestDependencies.jUnitExt
+    androidTestImplementation appTestDependencies.espresso
+}
