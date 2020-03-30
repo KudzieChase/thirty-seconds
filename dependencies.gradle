@@ -20,6 +20,7 @@ ext {
     espressoVersion = '3.2.0'
     lifecycleVersion = '2.2.0'
     coroutinesVersion = '1.3.5'
+    navigationVersion = '2.3.0-alpha04'
 
     appDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}",
@@ -27,7 +28,9 @@ ext {
             appcompat         : "androidx.appcompat:appcompat:${appcompatVersion}",
             constraintLayout  : "androidx.constraintlayout:constraintlayout:${constraintLayoutVersion}",
             materialComponents: "com.google.android.material:material:${materialComponentsVersion}",
-            kotlinCoroutines  : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}"
+            kotlinCoroutines  : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
+            navigationFragment: "androidx.navigation:navigation-fragment-ktx:${navigationVersion}",
+            navigationUI      : "androidx.navigation:navigation-ui-ktx:${navigationVersion}"
     ]
 
     appTestDependencies = [

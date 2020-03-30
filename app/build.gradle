@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
 
@@ -43,6 +44,8 @@ dependencies {
     implementation appDependencies.constraintLayout
     implementation appDependencies.materialComponents
     implementation appDependencies.kotlinCoroutines
+    implementation appDependencies.navigationFragment
+    implementation appDependencies.navigationUI
 
     //Testing
     testImplementation appTestDependencies.jUnit
