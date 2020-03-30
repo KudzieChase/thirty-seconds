@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.ThirtySeconds" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!--Material shape attributes-->
+        <item name="shapeAppearanceSmallComponent">
+            @style/ShapeAppearance.ThirtySeconds.SmallComponent
+        </item>
+        <item name="shapeAppearanceMediumComponent">
+            @style/ShapeAppearance.ThirtySeconds.MediumComponent
+        </item>
+        <item name="shapeAppearanceLargeComponent">
+            @style/ShapeAppearance.ThirtySeconds.LargeComponent
+        </item>
+
+        <!--Material type attributes-->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.ThirtySeconds.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.ThirtySeconds.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.ThirtySeconds.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.ThirtySeconds.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.ThirtySeconds.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.ThirtySeconds.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.ThirtySeconds.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.ThirtySeconds.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.ThirtySeconds.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.ThirtySeconds.Body2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.ThirtySeconds.Button</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.ThirtySeconds.Caption</item>
+
+        <item name="materialButtonStyle">@style/Widget.ThirtySeconds.Button</item>
+
+        <item name="android:statusBarColor">@color/immersive_ui</item>
+    </style>
+
+    <style name="ThirtySeconds" parent="@style/Base.ThirtySeconds" />
+
+    <style name="ThirtySeconds.AppTheme">
+        <item name="colorPrimary">@color/app_blue_400</item>
+        <item name="colorPrimaryVariant">@color/app_blue_500</item>
+        <item name="colorSecondary">@color/app_green_300</item>
+        <item name="colorSecondaryVariant">@color/app_green_400</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+
+    <style name="ThemeOverlay.ThirtySeconds.AppTheme.Dark" parent="@style/ThemeOverlay.MaterialComponents.Dark">
+        <item name="colorPrimary">@color/app_blue_400</item>
+        <item name="colorPrimaryVariant">@color/app_blue_500</item>
+        <item name="colorSecondary">@color/app_green_300</item>
+        <item name="colorSecondaryVariant">@color/app_green_400</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <style name="ThemeOverlay.ThirtySeconds.Button" parent="">
+        <item name="colorPrimary">@color/app_green_300</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <style name="ThirtySeconds.Yellow">
+        <item name="colorSurface">@color/app_yellow_400</item>
+        <item name="colorOnPrimary">@color/black</item>
+    </style>
+
+    <style name="ThirtySeconds.Pink">
+        <item name="colorSurface">@color/app_pink_500</item>
+        <item name="colorOnPrimary">@color/black</item>
+    </style>
+
+    <style name="ThemeOverlay.ThirtySeconds.Button.Red" parent="">
+        <item name="colorPrimary">@color/app_red_100</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+
+</resources>

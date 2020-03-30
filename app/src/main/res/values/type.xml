@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.ThirtySeconds.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/amiko_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="fontFamily">@font/amiko_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Headline3" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="fontFamily">@font/amiko_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Headline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/amiko_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="lineHeight">40sp</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Headline5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/amiko_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/amiko_semibold</item>
+        <item name="lineHeight">28sp</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/amiko_semibold</item>
+        <item name="lineHeight">22sp</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="fontFamily">@font/amiko_semibold</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/amiko</item>
+        <item name="lineHeight">28sp</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/amiko_bold</item>
+        <item name="lineHeight">16sp</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/amiko_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
+    <style name="TextAppearance.ThirtySeconds.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/amiko</item>
+    </style>
+
+</resources>

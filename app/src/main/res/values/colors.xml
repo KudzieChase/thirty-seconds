@@ -3,4 +3,23 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+
+    <!--Theme colors-->
+    <color name="app_blue_300">#7A8EE2</color>
+    <color name="app_blue_400">#5A73DB</color>
+    <color name="app_blue_500">#385AD4</color>
+
+    <color name="app_green_300">#6ED0A1</color>
+    <color name="app_green_400">#48C58C</color>
+    <color name="app_green_500">#03BB77</color>
+
+    <color name="app_yellow_400">#FFEA00</color>
+    <color name="app_red_100">#D06E6E</color>
+
+    <color name="app_pink_500">#FFFF0266</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="immersive_ui">#33000000</color>
 </resources>

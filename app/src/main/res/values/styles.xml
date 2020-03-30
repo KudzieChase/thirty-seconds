@@ -1,11 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <!-- Styles for specific widgets here -->
+    <style name="Widget.ThirtySeconds.Button" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.ThirtySeconds.Button</item>
+        <item name="android:textAppearance">@style/TextAppearance.ThirtySeconds.Button</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.ThirtySeconds.SmallComponent</item>
+    </style>
+
+    <style name="Widget.ThirtySeconds.Button.Red" parent="@style/Widget.ThirtySeconds.Button">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.ThirtySeconds.Button.Red</item>
     </style>
 
 </resources>
