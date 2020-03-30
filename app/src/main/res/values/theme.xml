@@ -31,6 +31,7 @@
         <item name="materialButtonStyle">@style/Widget.ThirtySeconds.Button</item>
 
         <item name="android:statusBarColor">@color/immersive_ui</item>
+        <item name="android:navigationBarColor">@color/immersive_ui</item>
     </style>
 
     <style name="ThirtySeconds" parent="@style/Base.ThirtySeconds" />
