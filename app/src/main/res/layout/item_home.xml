@@ -65,7 +65,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/guideline9"
-                    tools:text="NEW ROuND" />
+                    tools:text="@sample/home.json/data/destinationName" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline9"
