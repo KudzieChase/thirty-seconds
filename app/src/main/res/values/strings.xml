@@ -3,4 +3,8 @@
 
     <string name="intro_description">Play 30 seconds in real time with your friends.</string>
     <string name="get_started">Get Started</string>
+    <string name="profile">Profile</string>
+    <string name="done">Done</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="username">Username</string>
 </resources>

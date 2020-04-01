@@ -53,6 +53,15 @@
         <item name="colorOnPrimary">@color/white</item>
     </style>
 
+    <style name="ThemeOverlay.ThirtySeconds.AppTheme" parent="@style/ThemeOverlay.MaterialComponents.Light">
+        <item name="colorPrimary">@color/app_blue_400</item>
+        <item name="colorPrimaryVariant">@color/app_blue_500</item>
+        <item name="colorSecondary">@color/app_green_300</item>
+        <item name="colorSecondaryVariant">@color/app_green_400</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+
     <style name="ThemeOverlay.ThirtySeconds.Button" parent="">
         <item name="colorPrimary">@color/app_green_300</item>
         <item name="colorOnPrimary">@color/white</item>
