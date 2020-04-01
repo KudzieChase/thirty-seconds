@@ -59,6 +59,7 @@ dependencies {
     implementation appDependencies.kotlinCoroutines
     implementation appDependencies.navigationFragment
     implementation appDependencies.navigationUI
+    implementation appDependencies.coil
 
     //Testing
     testImplementation appTestDependencies.jUnit

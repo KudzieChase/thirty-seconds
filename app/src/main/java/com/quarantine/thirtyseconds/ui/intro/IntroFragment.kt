@@ -1,12 +1,10 @@
-package com.quarantine.thirtyseconds.ui
+package com.quarantine.thirtyseconds.ui.intro
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.marginBottom
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.quarantine.thirtyseconds.databinding.FragmentIntroBinding
 

@@ -1,4 +1,4 @@
-package com.quarantine.thirtyseconds.ui
+package com.quarantine.thirtyseconds.ui.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater

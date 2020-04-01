@@ -3,8 +3,18 @@ package com.quarantine.thirtyseconds.utils
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
+import coil.api.load
+
+
+@BindingAdapter("imgResource")
+fun ImageView.bindImgDrawable(
+    resource: Int
+) {
+    load(resource)
+}
 
 @BindingAdapter("layoutFullscreen")
 fun View.bindLayoutFullscreen(previousFullscreen: Boolean, fullscreen: Boolean) {

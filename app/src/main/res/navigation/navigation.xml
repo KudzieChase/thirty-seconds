@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/navigation"
-        app:startDestination="@id/introFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/introFragment">
 
     <fragment
-            android:id="@+id/introFragment"
-            android:name="com.quarantine.thirtyseconds.ui.IntroFragment"
-            android:label="IntroFragment"
-            tools:layout="@layout/fragment_intro" />
+        android:id="@+id/introFragment"
+        android:name="com.quarantine.thirtyseconds.ui.intro.IntroFragment"
+        android:label="IntroFragment"
+        tools:layout="@layout/fragment_intro" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.quarantine.thirtyseconds.ui.ProfileFragment"
+        android:name="com.quarantine.thirtyseconds.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.quarantine.thirtyseconds.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>
