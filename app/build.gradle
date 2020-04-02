@@ -60,6 +60,7 @@ dependencies {
     implementation appDependencies.navigationFragment
     implementation appDependencies.navigationUI
     implementation appDependencies.coil
+    implementation appDependencies.lottie
 
     //Testing
     testImplementation appTestDependencies.jUnit

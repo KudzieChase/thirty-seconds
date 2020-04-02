@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.quarantine.thirtyseconds.databinding.FragmentGameOverBinding
 
 class GameOverFragment : Fragment() {
 
@@ -13,6 +14,10 @@ class GameOverFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        val binding = FragmentGameOverBinding.inflate(inflater, container, false)
+        binding.apply {
+
+        }
+        return binding.root
     }
 }

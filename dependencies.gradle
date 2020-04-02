@@ -22,6 +22,7 @@ ext {
     coroutinesVersion = '1.3.5'
     navigationVersion = '2.3.0-alpha04'
     coilVersion = '0.9.5'
+    lottieVersion = '3.4.0'
 
     appDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}",
@@ -32,7 +33,8 @@ ext {
             kotlinCoroutines  : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
             navigationFragment: "androidx.navigation:navigation-fragment-ktx:${navigationVersion}",
             navigationUI      : "androidx.navigation:navigation-ui-ktx:${navigationVersion}",
-            coil              : "io.coil-kt:coil:${coilVersion}"
+            coil              : "io.coil-kt:coil:${coilVersion}",
+            lottie            : "com.airbnb.android:lottie:${lottieVersion}"
     ]
 
     appTestDependencies = [
