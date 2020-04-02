@@ -60,6 +60,10 @@ dependencies {
     implementation appDependencies.navigationFragment
     implementation appDependencies.navigationUI
     implementation appDependencies.coil
+    implementation appDependencies.firebaseAuth
+    implementation appDependencies.firebaseDatabase
+    implementation appDependencies.firebaseStorage
+    implementation appDependencies.firebaseUIAuth
 
     //Testing
     testImplementation appTestDependencies.jUnit

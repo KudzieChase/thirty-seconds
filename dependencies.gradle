@@ -23,6 +23,12 @@ ext {
     navigationVersion = '2.3.0-alpha04'
     coilVersion = '0.9.5'
 
+    // Firebase
+    firebaseUIversion = '6.2.1'
+    authVersion = '19.3.0'
+    databaseVersion = '19.2.1'
+    storageVersion = '19.1.1'
+
     appDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}",
             androidKtx        : "androidx.core:core-ktx:${ktxVersion}",
@@ -32,7 +38,11 @@ ext {
             kotlinCoroutines  : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}",
             navigationFragment: "androidx.navigation:navigation-fragment-ktx:${navigationVersion}",
             navigationUI      : "androidx.navigation:navigation-ui-ktx:${navigationVersion}",
-            coil              : "io.coil-kt:coil:${coilVersion}"
+            coil              : "io.coil-kt:coil:${coilVersion}",
+            firebaseAuth      : "com.google.firebase:firebase-auth:${authVersion}",
+            firebaseDatabase  : "com.google.firebase:firebase-database-ktx:${databaseVersion}",
+            firebaseStorage   : "com.google.firebase:firebase-storage-ktx:${storageVersion}",
+            firebaseUIAuth    : "com.firebaseui:firebase-ui-auth:${firebaseUIversion}"
     ]
 
     appTestDependencies = [
