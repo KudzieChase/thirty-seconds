@@ -16,4 +16,6 @@
     <string name="restart_game">Restart Game</string>
 
     <string name="error_occurred">Task failed successfully! :(</string>
+    <string name="nickname_already_taken">This nickname is already taken</string>
+    <string name="photo_uploaded">Profile picture changed</string>
 </resources>

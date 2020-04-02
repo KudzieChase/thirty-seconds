@@ -19,7 +19,12 @@
         android:id="@+id/profileFragment"
         android:name="com.quarantine.thirtyseconds.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.quarantine.thirtyseconds.ui.home.HomeFragment"

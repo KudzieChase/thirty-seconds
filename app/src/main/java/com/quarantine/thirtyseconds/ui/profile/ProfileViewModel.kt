@@ -19,7 +19,7 @@ class ProfileViewModel(
 ) : ViewModel() {
 
     private val _uploadedPhotoUrl = MutableLiveData<Result<String>>()
-    val uploadSuccessful: LiveData<Result<String>>
+    val uploadedPhotoUrl: LiveData<Result<String>>
         get() = _uploadedPhotoUrl
 
     private val _profileSaved = MutableLiveData<Result<Boolean>>()
@@ -44,17 +44,11 @@ class ProfileViewModel(
             }
             repository.getDownloadUrl()
         }.addOnSuccessListener { uri ->
-            // TODO: Test if this automatically updates
-            // the photo without the need of _uploadedPhotoUrl
-
-            // If it does, change the livedata to use a Boolean
-            // just linke profileSaved
             repository.savePhotoToAuth(uri).addOnSuccessListener {
-
+                _uploadedPhotoUrl.value = Result.Success(uri.toString())
             }.addOnFailureListener {
-
+                _uploadedPhotoUrl.value = Result.Error(it)
             }
-            // _uploadedPhotoUrl.value = Result.Success(uri.toString())
         }.addOnFailureListener {
             _uploadedPhotoUrl.value = Result.Error(it)
         }
@@ -87,7 +81,7 @@ class ProfileViewModel(
                     }
 
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val exists = dataSnapshot.getValue<Boolean>()!!
+                        val exists = dataSnapshot.getValue<Boolean>() != null
                         if (exists) {
                             _profileSaved.value = Result.Error(NicknameTakenException())
                         } else {
