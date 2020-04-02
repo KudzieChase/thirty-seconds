@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "destinationName": "New Round"
+    },
+    {
+      "destinationName": "Profile"
+    },
+    {
+      "destinationName": "Invite Friends"
+    },
+    {
+      "destinationName": "Tutorial"
+    }
+  ]
+}

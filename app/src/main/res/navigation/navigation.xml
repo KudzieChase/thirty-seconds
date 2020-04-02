@@ -20,4 +20,14 @@
         android:name="com.quarantine.thirtyseconds.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/gamePlayFragment"
+        android:name="com.quarantine.thirtyseconds.ui.gameplay.GamePlayFragment"
+        android:label="fragment_game_play"
+        tools:layout="@layout/fragment_game_play" />
+    <fragment
+        android:id="@+id/gameOverFragment"
+        android:name="com.quarantine.thirtyseconds.ui.gameover.GameOverFragment"
+        android:label="fragment_game_over"
+        tools:layout="@layout/fragment_game_over" />
 </navigation>

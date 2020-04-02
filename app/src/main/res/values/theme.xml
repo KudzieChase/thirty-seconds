@@ -77,6 +77,11 @@
         <item name="colorOnPrimary">@color/black</item>
     </style>
 
+    <style name="ThirtySeconds.Cyan">
+        <item name="colorSurface">@color/cyan</item>
+        <item name="colorOnPrimary">@color/black</item>
+    </style>
+
     <style name="ThemeOverlay.ThirtySeconds.Button.Red" parent="">
         <item name="colorPrimary">@color/app_red_100</item>
         <item name="colorOnPrimary">@color/white</item>

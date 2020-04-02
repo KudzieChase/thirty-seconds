@@ -64,6 +64,7 @@ dependencies {
     implementation appDependencies.firebaseDatabase
     implementation appDependencies.firebaseStorage
     implementation appDependencies.firebaseUIAuth
+    implementation appDependencies.lottie
 
     //Testing
     testImplementation appTestDependencies.jUnit

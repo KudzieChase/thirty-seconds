@@ -8,4 +8,10 @@
     <string name="profile_image">Profile Image</string>
     <string name="username">Username</string>
     <string name="home">Home</string>
+    <string name="chat_box_hint">Enter description of word here.</string>
+    <string name="send_button">Send Button</string>
+    <string name="round">Round</string>
+    <string name="game_over">Game Over</string>
+    <string name="new_game">New Game</string>
+    <string name="restart_game">Restart Game</string>
 </resources>
