@@ -15,4 +15,8 @@ class IntroViewModel(auth: FirebaseAuth) : ViewModel() {
         _isUserSignedIn.value = auth.currentUser != null
     }
 
+    fun signInComplete() {
+        _isUserSignedIn.value = true
+    }
+
 }
