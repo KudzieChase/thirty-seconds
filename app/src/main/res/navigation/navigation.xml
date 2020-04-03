@@ -12,7 +12,6 @@
         tools:layout="@layout/fragment_intro" >
         <action
             android:id="@+id/action_introFragment_to_profileFragment"
-            app:popUpTo="@id/profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
     <fragment
@@ -22,14 +21,19 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profileFragment_to_homeFragment"
-            app:popUpTo="@id/homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.quarantine.thirtyseconds.ui.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/profileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/gamePlayFragment"
         android:name="com.quarantine.thirtyseconds.ui.gameplay.GamePlayFragment"

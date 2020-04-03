@@ -81,6 +81,8 @@ class ProfileFragment : Fragment() {
                 when (result) {
                     is Result.Success -> {
                         if (result.data) {
+                            // TODO: Find out why the profile fragment is not
+                            // being removed from the back stack
                             findNavController().navigate(R.id.action_profileFragment_to_homeFragment)
                         }
                     }
