@@ -44,4 +44,9 @@
         android:name="com.quarantine.thirtyseconds.ui.gameover.GameOverFragment"
         android:label="fragment_game_over"
         tools:layout="@layout/fragment_game_over" />
+    <fragment
+        android:id="@+id/tutorialFragment"
+        android:name="com.quarantine.thirtyseconds.ui.tutorial.TutorialFragment"
+        android:label="fragment_tutorial"
+        tools:layout="@layout/fragment_tutorial" />
 </navigation>
