@@ -17,9 +17,21 @@ object HomeDiff : DiffUtil.ItemCallback<Home>() {
 }
 
 val homeItems = listOf(
-    Home("New Round", R.drawable.ic_new),
-    Home("Profile", R.drawable.ic_account_circle,
-        R.id.action_homeFragment_to_profileFragment),
-    Home("Tutorial", R.drawable.ic_help_outline),
-    Home("Invite Friends", R.drawable.ic_contact_mail)
+    Home(
+        "New Round",
+        R.drawable.ic_new
+    ),
+    Home(
+        "Profile",
+        R.drawable.ic_account_circle,
+        R.id.action_homeFragment_to_profileFragment
+    ),
+    Home(
+        "Tutorial",
+        R.drawable.ic_help_outline
+    ),
+    Home(
+        "Invite Friends",
+        R.drawable.ic_contact_mail
+    )
 )
