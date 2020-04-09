@@ -33,12 +33,22 @@
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_gamePlayFragment"
+            app:destination="@id/gamePlayFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_tutorialFragment"
+            app:destination="@id/tutorialFragment" />
     </fragment>
     <fragment
         android:id="@+id/gamePlayFragment"
         android:name="com.quarantine.thirtyseconds.ui.gameplay.GamePlayFragment"
         android:label="fragment_game_play"
-        tools:layout="@layout/fragment_game_play" />
+        tools:layout="@layout/fragment_game_play" >
+        <action
+            android:id="@+id/action_gamePlayFragment_to_gameOverFragment"
+            app:destination="@id/gameOverFragment" />
+    </fragment>
     <fragment
         android:id="@+id/gameOverFragment"
         android:name="com.quarantine.thirtyseconds.ui.gameover.GameOverFragment"
