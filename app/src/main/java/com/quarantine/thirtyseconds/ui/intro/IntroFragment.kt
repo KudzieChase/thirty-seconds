@@ -14,11 +14,13 @@ import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.quarantine.thirtyseconds.R
 import com.quarantine.thirtyseconds.databinding.FragmentIntroBinding
+import com.quarantine.thirtyseconds.utils.PreferencesUtils
 import com.quarantine.thirtyseconds.utils.REQUEST_CODE_SIGN_IN
 
 class IntroFragment : Fragment() {
 
     private var _binding: FragmentIntroBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -37,12 +39,19 @@ class IntroFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val preferences = PreferencesUtils(context)
+
         val factory = IntroViewModelFactory()
         viewModel = ViewModelProvider(this, factory).get(IntroViewModel::class.java)
 
         viewModel.isUserSignedIn.observe(viewLifecycleOwner, Observer { userIsSignedIn ->
             if (userIsSignedIn) {
-                findNavController().navigate(R.id.action_introFragment_to_profileFragment)
+                //Go to profile fragment when its first time otherwise moves in to home fragment
+                if (preferences.isUserFirstTime()) {
+                    findNavController().navigate(R.id.action_introFragment_to_profileFragment)
+                } else {
+                    findNavController().navigate(R.id.action_introFragment_to_homeFragment)
+                }
             }
         })
 

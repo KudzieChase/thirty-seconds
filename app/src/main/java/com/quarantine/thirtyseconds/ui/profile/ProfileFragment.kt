@@ -15,6 +15,7 @@ import coil.transform.CircleCropTransformation
 import com.quarantine.thirtyseconds.R
 import com.quarantine.thirtyseconds.databinding.FragmentProfileBinding
 import com.quarantine.thirtyseconds.utils.NicknameTakenException
+import com.quarantine.thirtyseconds.utils.PreferencesUtils
 import com.quarantine.thirtyseconds.utils.REQUEST_CODE_IMAGE_CHOOSER
 import com.quarantine.thirtyseconds.utils.Result
 
@@ -120,6 +121,8 @@ class ProfileFragment : Fragment() {
                 //  e.g. Not allowing spaces or special characters
                 if (newNickname.isNotEmpty()) {
                     viewModel.saveProfile(newNickname)
+                    //Change the first time shared preference
+                    PreferencesUtils(context).makeUserFirstTime()
                 } else {
                     // TODO: Require the user to provide a nickname
                 }

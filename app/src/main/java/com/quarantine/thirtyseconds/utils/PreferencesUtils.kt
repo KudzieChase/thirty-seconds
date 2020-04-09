@@ -5,7 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.core.content.edit
 
-class PreferencesUtils(context: Context) {
+class PreferencesUtils(context: Context?) {
 
     companion object {
         const val SHARED_PREFERENCES_NAME = "thirty_seconds_prefs"
@@ -13,15 +13,17 @@ class PreferencesUtils(context: Context) {
     }
 
     private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)
+        context!!.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)
 
     fun isUserFirstTime(): Boolean {
-        return sharedPreferences.getBoolean(KEY_IS_FIRST_TIME, false)
+        return sharedPreferences.getBoolean(KEY_IS_FIRST_TIME, true)
     }
 
     fun makeUserFirstTime() {
-        sharedPreferences.edit(commit = true) {
-            putBoolean(KEY_IS_FIRST_TIME, true)
+        if (isUserFirstTime()) {
+            sharedPreferences.edit(commit = true) {
+                putBoolean(KEY_IS_FIRST_TIME, false)
+            }
         }
     }
 }
