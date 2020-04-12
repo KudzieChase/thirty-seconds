@@ -2,23 +2,28 @@
   "data": [
     {
       "word": "Kendrick Lamar",
-      "hint": "Does not matter"
+      "hint": "Does not matter",
+      "isActive": false
     },
     {
       "word": "The Beatles",
-      "hint": "Does not matter"
+      "hint": "Does not matter",
+      "isActive": true
     },
     {
       "word": "Beyonce",
-      "hint": "Does not matter"
+      "hint": "Does not matter",
+      "isActive": false
     },
     {
       "word": "Sam Smith",
-      "hint": "Does not matter"
+      "hint": "Does not matter",
+      "isActive": false
     },
     {
       "word": "Imagine Dragons",
-      "hint": "Does not matter"
+      "hint": "Does not matter",
+      "isActive": false
     }
   ]
 }

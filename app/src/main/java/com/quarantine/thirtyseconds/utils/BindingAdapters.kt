@@ -1,6 +1,7 @@
 package com.quarantine.thirtyseconds.utils
 
 import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.ImageView
@@ -24,6 +25,15 @@ fun setTime(view: TextView, timestamp: Long) {
     val stamp = Timestamp(timestamp)
     val time = Time(stamp.time)
     view.text = time.toString()
+}
+
+@BindingAdapter("isActiveIndicator")
+fun isActive(view: ImageView, isActive: Boolean) {
+    if (isActive) {
+        view.visibility = VISIBLE
+    } else {
+        view.visibility = INVISIBLE
+    }
 }
 
 @BindingAdapter("layoutFullscreen")
