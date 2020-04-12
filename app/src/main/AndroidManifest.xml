@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/ThirtySeconds.AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <!-- Todo try AdjustPan-->
+        <activity
+            android:name=".ui.MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

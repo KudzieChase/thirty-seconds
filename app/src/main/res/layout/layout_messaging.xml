@@ -10,18 +10,20 @@
             android:id="@+id/message_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:fitsSystemWindows="true"
             android:scrollbarStyle="outsideOverlay"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- A horizontal line between the chatbox and RecyclerView -->
         <View
+            android:id="@+id/view"
             android:layout_width="0dp"
             android:layout_height="2dp"
-            android:layout_marginBottom="0dp"
             android:background="#dfdfdf"
             app:layout_constraintBottom_toTopOf="@+id/layout_chatbox"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -49,21 +51,19 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="@string/chat_box_hint"
-                android:inputType="text"
+                android:inputType="textMultiLine"
                 android:maxLines="6" />
 
-            <ImageView
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btn_send"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="bottom"
-                android:background="@drawable/circle_small"
-                android:clickable="true"
-                android:contentDescription="@string/send_button"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="10dp"
-                app:srcCompat="@drawable/ic_send" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/app_green_300"
+                app:elevation="4dp"
+                app:fabSize="normal"
+                app:srcCompat="@drawable/ic_send"
+                app:tint="@color/white" />
 
         </LinearLayout>
 
