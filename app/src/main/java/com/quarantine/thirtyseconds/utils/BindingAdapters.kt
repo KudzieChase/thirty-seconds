@@ -4,9 +4,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.updateLayoutParams
 import androidx.databinding.BindingAdapter
 import coil.api.load
+import java.sql.Time
+import java.sql.Timestamp
 
 
 @BindingAdapter("imgResource")
@@ -14,6 +17,13 @@ fun ImageView.bindImgDrawable(
     resource: Int
 ) {
     load(resource)
+}
+
+@BindingAdapter("timeText")
+fun setTime(view: TextView, timestamp: Long) {
+    val stamp = Timestamp(timestamp)
+    val time = Time(stamp.time)
+    view.text = time.toString()
 }
 
 @BindingAdapter("layoutFullscreen")
