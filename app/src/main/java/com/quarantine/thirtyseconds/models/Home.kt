@@ -28,7 +28,8 @@ val homeItems = listOf(
     ),
     Home(
         "Tutorial",
-        R.drawable.ic_help_outline
+        R.drawable.ic_help_outline,
+        R.id.action_homeFragment_to_tutorialFragment
     ),
     Home(
         "Invite Friends",
