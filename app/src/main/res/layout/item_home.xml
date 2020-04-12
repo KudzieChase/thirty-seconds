@@ -34,7 +34,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:background="@drawable/background_selector"
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/icon"
@@ -60,6 +61,7 @@
                     android:paddingBottom="8dp"
                     android:text="@{homeItem.destinationName}"
                     android:textAllCaps="true"
+                    android:textColor="@drawable/text_color_selector"
                     android:textAppearance="?attr/textAppearanceBody1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
