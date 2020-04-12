@@ -21,18 +21,18 @@ fun ImageView.bindImgDrawable(
 }
 
 @BindingAdapter("timeText")
-fun setTime(view: TextView, timestamp: Long) {
+fun TextView.setTime(timestamp: Long) {
     val stamp = Timestamp(timestamp)
     val time = Time(stamp.time)
-    view.text = time.toString()
+    text = time.toString()
 }
 
 @BindingAdapter("isActiveIndicator")
-fun isActive(view: ImageView, isActive: Boolean) {
-    if (isActive) {
-        view.visibility = VISIBLE
+fun ImageView.isActive(isActive: Boolean) {
+    visibility = if (isActive) {
+        VISIBLE
     } else {
-        view.visibility = INVISIBLE
+        INVISIBLE
     }
 }
 
