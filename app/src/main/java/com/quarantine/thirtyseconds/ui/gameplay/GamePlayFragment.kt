@@ -53,8 +53,6 @@ class GamePlayFragment : Fragment() {
                     is Result.Success -> {
                         if (result.data) {
                             container.visibility = View.VISIBLE
-                            // Only start the timer once the words are displayed
-                            viewModel.startTimer()
                         }
                     }
                     is Result.InProgress -> {
@@ -73,6 +71,7 @@ class GamePlayFragment : Fragment() {
                 when (result) {
                     is Result.Success -> {
                         messagesAdapter.updateMessages(result.data)
+                        messageList.smoothScrollToPosition(result.data.size - 1)
                     }
                     is Result.InProgress -> {
                         messagesAdapter.updateMessages(listOf())

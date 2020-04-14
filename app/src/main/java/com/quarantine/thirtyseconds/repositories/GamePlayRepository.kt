@@ -6,12 +6,9 @@ import androidx.lifecycle.Transformations
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
-import com.quarantine.thirtyseconds.models.Game
-import com.quarantine.thirtyseconds.models.GameCard
-import com.quarantine.thirtyseconds.models.Message
-import com.quarantine.thirtyseconds.models.MessageType
+import com.quarantine.thirtyseconds.models.*
 import com.quarantine.thirtyseconds.utils.DataSnapshotLiveData
 import com.quarantine.thirtyseconds.utils.Result
 
@@ -19,21 +16,69 @@ class GamePlayRepository(
     val auth: FirebaseAuth,
     private val database: FirebaseDatabase
 ) {
+    private val members = GameMembers()
+    private var gameStarted = false
+    private var currentTeam = 0
 
     var teamAPoints = 0
     var teamBPoints = 0
     private val gamesReference = database.getReference("games")
-    private val _key = gamesReference.push().key!!
+    private val _key = "-M4siw7Rcv8vsXi4tLXg"
     private val key get() = _key
 
     private val messageReference = gamesReference.child(key).child("messages")
+    private val joinRequestsRef = gamesReference.child(key).child("joinRequests")
+    private val membersReference = gamesReference.child(key).child("members")
     private val roundReference = gamesReference.child(key).child("currentRound")
     private val teamAScoreReference = gamesReference.child(key).child("teamA_score")
     private val teamBScoreReference = gamesReference.child(key).child("teamB_score")
 
     fun newGame(): Task<Void> {
         //Creates a new game
-        return gamesReference.child(key).setValue(Game())
+        val game = Game()
+        game.messages[messageReference.push().key!!] = Message(
+            senderNickname = "gamebot",
+            message = "You've created a new game. Invite your friends" +
+                    " using the code " + key, // TODO: Use string resource instead
+            type = MessageType.GAMEBOT,
+            timestamp = System.currentTimeMillis()
+        )
+        members.addMember(auth.currentUser!!.displayName!!)
+        game.members = members
+        return gamesReference.child(key).setValue(game)
+    }
+
+    init {
+        // Wait for join requests and add them to the members list
+        joinRequestsRef.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
+                val username = dataSnapshot.key!!
+                if (members.addMember(username)) {
+                    gamesReference.child(key).updateChildren(
+                        hashMapOf<String, Any>("members" to members)
+                    )
+                    sendBotMessage("$username has joined the game")
+                }
+                dataSnapshot.ref.removeValue()
+
+                // If we have at least 4 members, the game may start
+                if (members.size() >= 4 && !gameStarted) {
+                    sendBotMessage("Game is starting with\n$members")
+                    gameStarted = true
+                    // TODO: Move this to when the round starts
+                    val descriptor = members.nextTeamADescriptor()
+                    roundReference.child("descriptor")
+                        .setValue(descriptor)
+                    sendBotMessage("$descriptor will be describing the words." +
+                            "Time started")
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) { }
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) { }
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) { }
+            override fun onChildRemoved(p0: DataSnapshot) { }
+        })
     }
 
     fun endGame(): Task<Void> {
