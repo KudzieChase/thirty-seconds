@@ -6,22 +6,12 @@ data class GameMembers(
 ) {
     fun size() = teamA.size + teamB.size
 
-    fun nextTeamADescriptor(): String {
-        if (TEAM_A_DESCRIPTOR == teamA.size - 1) {
-            TEAM_A_DESCRIPTOR = 0
+    fun nextDescriptor(currentTeam: Int): String {
+        return if (currentTeam == 0) {
+            nextTeamADescriptor()
         } else {
-            TEAM_A_DESCRIPTOR++
+            nextTeamBDescriptor()
         }
-        return teamA[TEAM_A_DESCRIPTOR]
-    }
-
-    fun nextTeamBDescriptor(): String {
-        if (TEAM_B_DESCRIPTOR == teamB.size - 1) {
-            TEAM_B_DESCRIPTOR = 0
-        } else {
-            TEAM_B_DESCRIPTOR++
-        }
-        return teamB[TEAM_B_DESCRIPTOR]
     }
 
     fun addMember(username: String): Boolean {
@@ -41,6 +31,24 @@ data class GameMembers(
             nextTeam()
         }
         return memberWasAdded
+    }
+
+    private fun nextTeamADescriptor(): String {
+        if (TEAM_A_DESCRIPTOR == teamA.size - 1) {
+            TEAM_A_DESCRIPTOR = 0
+        } else {
+            TEAM_A_DESCRIPTOR++
+        }
+        return teamA[TEAM_A_DESCRIPTOR]
+    }
+
+    private fun nextTeamBDescriptor(): String {
+        if (TEAM_B_DESCRIPTOR == teamB.size - 1) {
+            TEAM_B_DESCRIPTOR = 0
+        } else {
+            TEAM_B_DESCRIPTOR++
+        }
+        return teamB[TEAM_B_DESCRIPTOR]
     }
 
     private fun nextTeam() {

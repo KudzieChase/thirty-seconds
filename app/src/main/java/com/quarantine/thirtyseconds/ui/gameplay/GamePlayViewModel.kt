@@ -1,6 +1,7 @@
 package com.quarantine.thirtyseconds.ui.gameplay
 
 import android.os.CountDownTimer
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.quarantine.thirtyseconds.models.Message
@@ -15,6 +16,15 @@ class GamePlayViewModel(
     private val _gameCreated = MutableLiveData<Result<Boolean>>()
     val gameCreated: MutableLiveData<Result<Boolean>>
         get() = _gameCreated
+
+    private val _playerIsCurrentDescriptor = MutableLiveData<Boolean>()
+    val playerIsCurrentDescriptor: LiveData<Boolean>
+        get() = _playerIsCurrentDescriptor
+
+    private val _playersTeamIsPlaying = MutableLiveData<Boolean>()
+    val playersTeamIsPlaying: LiveData<Boolean>
+        get() = _playersTeamIsPlaying
+
     val messages = repository.getMessages()
     val words = repository.getWords()
     val time = repository.getTime()
@@ -34,6 +44,8 @@ class GamePlayViewModel(
 
     init {
         _gameCreated.value = Result.Success(false)
+        _playerIsCurrentDescriptor.value = repository.playerIsCurrentDescriptor
+        _playersTeamIsPlaying.value = repository.playersTeamIsPlaying
     }
 
     fun startNewGame() {
