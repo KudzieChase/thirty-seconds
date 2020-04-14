@@ -85,18 +85,8 @@ class GamePlayFragment : Fragment() {
                 }
             })
 
-            viewModel.words.observe(viewLifecycleOwner, Observer { result ->
-                when (result) {
-                    is Result.Success -> {
-                        wordsAdapter.submitList(result.data)
-                    }
-                    is Result.InProgress -> {
-
-                    }
-                    is Result.Error -> {
-
-                    }
-                }
+            viewModel.words.observe(viewLifecycleOwner, Observer { words ->
+                wordsAdapter.submitList(words)
             })
 
             btnSend.setOnClickListener {

@@ -26,7 +26,7 @@ class GamePlayViewModel(
         get() = _playersTeamIsPlaying
 
     val messages = repository.messagesLiveData
-    val words = repository.getWords()
+    val words = repository.wordsLiveData
     val time = repository.timeLiveData
 
     val currentUser = repository.getUser()

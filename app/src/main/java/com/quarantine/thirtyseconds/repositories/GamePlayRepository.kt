@@ -1,9 +1,7 @@
 package com.quarantine.thirtyseconds.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -35,6 +33,11 @@ class GamePlayRepository(
     private val roundReference = gamesReference.child(key).child("currentRound")
     private val teamAScoreReference = gamesReference.child(key).child("teamA_score")
     private val teamBScoreReference = gamesReference.child(key).child("teamB_score")
+
+    // Words
+    private val _wordsLiveData = MutableLiveData<List<GameCard>>()
+    val wordsLiveData: LiveData<List<GameCard>>
+            get() = _wordsLiveData
 
     // Time
     private val _timeLiveData = MutableLiveData<Int>()
@@ -75,6 +78,13 @@ class GamePlayRepository(
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val game = dataSnapshot.getValue<Game>()!!
 
+            // Words
+            val words = arrayListOf<GameCard>()
+            for (word in game.currentRound.displayedWords.values) {
+                words.add(word)
+            }
+            _wordsLiveData.value = words
+
             // Time
             _timeLiveData.value = game.currentRound.timeRemaining
 
@@ -89,14 +99,21 @@ class GamePlayRepository(
         override fun onCancelled(error: DatabaseError) {
             error.toException().printStackTrace()
 
+            // Words
+            _wordsLiveData.value = listOf()
+
+            // Time
+            _timeLiveData.value = 0
+
             // Messages
             _messagesLiveData.value = Result.Error(error.toException())
         }
     }
 
     init {
-        _messagesLiveData.value = Result.InProgress
+        _wordsLiveData.value = listOf()
         _timeLiveData.value = 0
+        _messagesLiveData.value = Result.InProgress
     }
 
     fun newGame(): Task<Void> {
