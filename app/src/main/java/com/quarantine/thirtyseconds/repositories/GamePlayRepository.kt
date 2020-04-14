@@ -2,13 +2,18 @@ package com.quarantine.thirtyseconds.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.getValue
 import com.quarantine.thirtyseconds.models.Game
+import com.quarantine.thirtyseconds.models.GameCard
 import com.quarantine.thirtyseconds.models.Message
+import com.quarantine.thirtyseconds.models.MessageType
 import com.quarantine.thirtyseconds.utils.DataSnapshotLiveData
+import com.quarantine.thirtyseconds.utils.Result
 
 class GamePlayRepository(
     val auth: FirebaseAuth,
@@ -66,9 +71,76 @@ class GamePlayRepository(
     }
 
     fun sendMessage(message: Message): Task<Void> {
-        //Generate a new message key and sends a message
-        val messageKey = messageReference.push().key!!
-        return messageReference.child(messageKey).setValue(message)
+        return messageReference.push().setValue(message.toMap())
+    }
+
+    fun sendBotMessage(messageText: String) {
+        val message = Message(
+            senderNickname = "gamebot",
+            message = messageText,
+            type = MessageType.GAMEBOT
+        )
+        sendMessage(message)
+    }
+
+    fun getMessages(): LiveData<Result<List<Message>>> {
+        val liveData = DataSnapshotLiveData(messageReference, true)
+        return Transformations.map(liveData) { result ->
+            when (result) {
+                is Result.Success -> {
+                    val snapshot  = result.data
+                    val list = ArrayList<Message>()
+                    for (snap in snapshot.children) {
+                        list.add(snap.getValue<Message>()!!)
+                    }
+                    return@map Result.Success(list)
+                }
+                is Result.InProgress -> return@map Result.InProgress
+                is Result.Error -> return@map Result.Error(result.exception)
+            }
+        }
+    }
+
+    fun getWords(): LiveData<Result<List<GameCard>>> {
+        // TODO: Load the words from database
+        val wordsLiveData = MutableLiveData<Result<List<GameCard>>>()
+        wordsLiveData.value = Result.Success(
+            listOf(
+                GameCard("Kendrick Lamar", true),
+                GameCard("Rihanna", true),
+                GameCard("PC", true),
+                GameCard("Car", false),
+                GameCard("Harare", true)
+            )
+        )
+        return wordsLiveData
+    }
+
+    fun getTime(): LiveData<Int> {
+        val ref = gamesReference.child(key).child("currentRound")
+            .child("timeRemaining")
+        val liveData = DataSnapshotLiveData(ref, true)
+        return Transformations.map(liveData) { result ->
+            when (result) {
+                is Result.Success -> {
+                    val snapshot = result.data
+                    return@map snapshot.getValue<Int>()
+                }
+                is Result.InProgress -> {
+                    return@map 0
+                }
+                is Result.Error -> {
+                    // Might be helpful to return -1
+                    // in case of error
+                    return@map 0
+                }
+            }
+        }
+    }
+
+    fun setTime(secondsRemaining: Int) {
+        gamesReference.child(key).child("currentRound")
+            .child("timeRemaining").setValue(secondsRemaining)
     }
 
     fun getUser(): LiveData<FirebaseUser?> {
