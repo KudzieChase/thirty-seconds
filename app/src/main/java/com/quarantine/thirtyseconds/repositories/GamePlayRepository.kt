@@ -1,5 +1,6 @@
 package com.quarantine.thirtyseconds.repositories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -35,6 +36,11 @@ class GamePlayRepository(
     private val teamAScoreReference = gamesReference.child(key).child("teamA_score")
     private val teamBScoreReference = gamesReference.child(key).child("teamB_score")
 
+    // Messages
+    private val _messagesLiveData = MutableLiveData<Result<List<Message>>>()
+    val messagesLiveData: LiveData<Result<List<Message>>>
+        get() = _messagesLiveData
+
     private val joinEventListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
             val username = dataSnapshot.key!!
@@ -51,12 +57,37 @@ class GamePlayRepository(
                 sendBotMessage("Game is starting with\n$members")
                 gameStarted = true
                 // TODO: Start a round
+
             }
         }
         override fun onCancelled(p0: DatabaseError) { }
         override fun onChildMoved(p0: DataSnapshot, p1: String?) { }
         override fun onChildChanged(p0: DataSnapshot, p1: String?) { }
         override fun onChildRemoved(p0: DataSnapshot) { }
+    }
+
+    private val gameListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            val game = dataSnapshot.getValue<Game>()!!
+
+            // Messages
+            val messages = arrayListOf<Message>()
+            for (message in game.messages.values) {
+                messages.add(message)
+            }
+            _messagesLiveData.value = Result.Success(messages)
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            error.toException().printStackTrace()
+
+            // Messages
+            _messagesLiveData.value = Result.Error(error.toException())
+        }
+    }
+
+    init {
+        _messagesLiveData.value = Result.InProgress
     }
 
     fun newGame(): Task<Void> {
@@ -76,6 +107,7 @@ class GamePlayRepository(
 
         // Wait for join requests and add them to the members list
         joinRequestsRef.addChildEventListener(joinEventListener)
+        gamesReference.child(key).addValueEventListener(gameListener)
         return gamesReference.child(key).setValue(game)
     }
 
@@ -88,6 +120,7 @@ class GamePlayRepository(
     fun endGame(): Task<Void> {
         // Stop waiting for members to join
         joinRequestsRef.removeEventListener(joinEventListener)
+        gamesReference.child(key).removeEventListener(gameListener)
         return gamesReference.child(key).child("gameOver").setValue(true)
     }
 
@@ -155,24 +188,6 @@ class GamePlayRepository(
             type = MessageType.GAMEBOT
         )
         sendMessage(message)
-    }
-
-    fun getMessages(): LiveData<Result<List<Message>>> {
-        val liveData = DataSnapshotLiveData(messageReference, true)
-        return Transformations.map(liveData) { result ->
-            when (result) {
-                is Result.Success -> {
-                    val snapshot  = result.data
-                    val list = ArrayList<Message>()
-                    for (snap in snapshot.children) {
-                        list.add(snap.getValue<Message>()!!)
-                    }
-                    return@map Result.Success(list)
-                }
-                is Result.InProgress -> return@map Result.InProgress
-                is Result.Error -> return@map Result.Error(result.exception)
-            }
-        }
     }
 
     fun getWords(): LiveData<Result<List<GameCard>>> {
