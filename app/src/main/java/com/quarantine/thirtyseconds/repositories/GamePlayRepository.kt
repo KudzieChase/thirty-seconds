@@ -36,6 +36,11 @@ class GamePlayRepository(
     private val teamAScoreReference = gamesReference.child(key).child("teamA_score")
     private val teamBScoreReference = gamesReference.child(key).child("teamB_score")
 
+    // Time
+    private val _timeLiveData = MutableLiveData<Int>()
+    val timeLiveData: LiveData<Int>
+        get() = _timeLiveData
+
     // Messages
     private val _messagesLiveData = MutableLiveData<Result<List<Message>>>()
     val messagesLiveData: LiveData<Result<List<Message>>>
@@ -70,6 +75,9 @@ class GamePlayRepository(
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val game = dataSnapshot.getValue<Game>()!!
 
+            // Time
+            _timeLiveData.value = game.currentRound.timeRemaining
+
             // Messages
             val messages = arrayListOf<Message>()
             for (message in game.messages.values) {
@@ -88,6 +96,7 @@ class GamePlayRepository(
 
     init {
         _messagesLiveData.value = Result.InProgress
+        _timeLiveData.value = 0
     }
 
     fun newGame(): Task<Void> {
@@ -203,28 +212,6 @@ class GamePlayRepository(
             )
         )
         return wordsLiveData
-    }
-
-    fun getTime(): LiveData<Int> {
-        val ref = gamesReference.child(key).child("currentRound")
-            .child("timeRemaining")
-        val liveData = DataSnapshotLiveData(ref, true)
-        return Transformations.map(liveData) { result ->
-            when (result) {
-                is Result.Success -> {
-                    val snapshot = result.data
-                    return@map snapshot.getValue<Int>()
-                }
-                is Result.InProgress -> {
-                    return@map 0
-                }
-                is Result.Error -> {
-                    // Might be helpful to return -1
-                    // in case of error
-                    return@map 0
-                }
-            }
-        }
     }
 
     fun setTime(secondsRemaining: Int) {
