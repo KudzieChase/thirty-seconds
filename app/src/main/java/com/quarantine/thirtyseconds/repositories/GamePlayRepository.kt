@@ -15,7 +15,7 @@ class GamePlayRepository(
     val auth: FirebaseAuth,
     private val database: FirebaseDatabase
 ) {
-    private val members = GameMembers()
+    private var game = Game()
     private var gameStarted = false
     private var currentTeam = -1
 
@@ -59,17 +59,17 @@ class GamePlayRepository(
     private val joinEventListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
             val username = dataSnapshot.key!!
-            if (members.addMember(username)) {
+            if (game.addMember(username)) {
                 gamesReference.child(key).updateChildren(
-                    hashMapOf<String, Any>("members" to members)
+                    hashMapOf<String, Any>("teams" to game.teams)
                 )
                 sendBotMessage("$username has joined the game")
             }
             dataSnapshot.ref.removeValue()
 
             // If we have at least 4 members, the game may start
-            if (members.size() >= 4 && !gameStarted) {
-                sendBotMessage("Game is starting with\n$members")
+            if (game.membersNumber() >= 4 && !gameStarted) {
+                sendBotMessage("Game is starting with\n${game.teamsString()}")
                 gameStarted = true
                 // Start the first round
                 newRound()
@@ -90,7 +90,7 @@ class GamePlayRepository(
             val isDescriptor = game.currentRound.currentDescriptor == username
             _playerIsCurrentDescriptor.value = isDescriptor
             _playersTeamIsPlaying.value =
-                game.members.memberBelongsTo(username, game.currentRound.currentTeam)
+                game.teams[game.currentRound.currentTeam].hasMember(username)
 
             _playersTeamIsPlaying.value = !game.currentRound.roundOver
 
@@ -139,7 +139,7 @@ class GamePlayRepository(
 
     fun newGame(): Task<Void> {
         //Creates a new game
-        val game = Game()
+        game = Game()
         game.messages[messageReference.push().key!!] = Message(
             senderNickname = "gamebot",
             message = "You've created a new game. Invite your friends" +
@@ -148,8 +148,7 @@ class GamePlayRepository(
             timestamp = System.currentTimeMillis()
         )
         val username = auth.currentUser!!.displayName!!
-        members.addMember(username)
-        game.members = members
+        game.addMember(username)
         game.currentRound.currentDescriptor = username
         // Wait for join requests and add them to the members list
         joinRequestsRef.addChildEventListener(joinEventListener)
@@ -175,9 +174,8 @@ class GamePlayRepository(
         currentTeam = if (currentTeam == -1 || currentTeam == 1) { 0 } else { 1 }
 
         // Get a new descriptor
-        val descriptor = members.nextDescriptor(currentTeam)
-        val team = if (currentTeam == 0) { "A" } else { "B"}
-        sendBotMessage("It's Team $team's turn. " +
+        val descriptor = game.nextDescriptor(currentTeam)
+        sendBotMessage("It's ${game.teams[currentTeam]}'s turn. " +
                 "$descriptor will be describing the words. " +
                 "Time started")
 
