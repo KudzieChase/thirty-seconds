@@ -71,7 +71,7 @@ class GamePlayRepository(
             if (members.size() >= 4 && !gameStarted) {
                 sendBotMessage("Game is starting with\n$members")
                 gameStarted = true
-                // Start a round
+                // Start the first round
                 newRound()
             }
         }
@@ -107,9 +107,7 @@ class GamePlayRepository(
             _timeLiveData.value = game.currentRound.timeRemaining
 
             // Messages
-            // TODO: Move messages out of here
-            // so that the RecyclerView stops scrolling when
-            // the time changes
+            // TODO: Move messages out of here so that the RecyclerView stops scrolling when time changes
             val messages = arrayListOf<Message>()
             for (message in game.messages.values) {
                 messages.add(message)
@@ -172,13 +170,18 @@ class GamePlayRepository(
         return gamesReference.child(key).child("gameOver").setValue(true)
     }
 
-    fun newRound() {
+    fun newRound(): Task<Void> {
         // Change teams
         currentTeam = if (currentTeam == -1 || currentTeam == 1) { 0 } else { 1 }
 
         // Get a new descriptor
         val descriptor = members.nextDescriptor(currentTeam)
-        roundReference.updateChildren(
+        val team = if (currentTeam == 0) { "A" } else { "B"}
+        sendBotMessage("It's Team $team's turn. " +
+                "$descriptor will be describing the words. " +
+                "Time started")
+
+        return roundReference.updateChildren(
             hashMapOf<String, Any>(
                 "currentDescriptor" to descriptor,
                 "currentTeam" to currentTeam,
@@ -193,11 +196,6 @@ class GamePlayRepository(
                 )
             )
         )
-
-        val team = if (currentTeam == 0) { "A" } else { "B"}
-        sendBotMessage("It's Team $team's turn. " +
-                "$descriptor will be describing the words. " +
-                "Time started")
     }
 
     fun endRound() {

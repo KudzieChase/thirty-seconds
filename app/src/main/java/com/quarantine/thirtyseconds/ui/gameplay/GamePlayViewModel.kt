@@ -54,10 +54,11 @@ class GamePlayViewModel(
                     timer = null
                     repository.sendBotMessage("Time is up!")
                     repository.endRound()
-                    timeStarted = false
                     // TODO: Display the actual scores
                     repository.sendBotMessage("Team A has x Score. Team B has y Score")
-                    repository.newRound()
+                    repository.newRound().addOnCompleteListener {
+                        timeStarted = false
+                    }
                 }
             }
         }
