@@ -20,7 +20,7 @@ class GamePlayFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: GamePlayViewModel by viewModels {
-        GamePlayViewModelFactory()
+        GamePlayViewModelFactory(activity!!.application)
     }
 
     override fun onCreateView(

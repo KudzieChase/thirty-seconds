@@ -22,4 +22,8 @@
     <string name="photo_uploaded">Profile picture changed</string>
     <string name="tutorial">Tutorial</string>
     <string name="rules_headline">You know the rules. And so do I.</string>
+
+    <string name="time_is_up">Time is Up!</string>
+    <string name="descriptor_gave_away_the_answer">Descriptor typed one of the words in the card.
+        Their team lost 1 point</string>
 </resources>

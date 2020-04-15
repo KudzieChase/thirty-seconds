@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.quarantine.thirtyseconds.models.*
@@ -88,8 +87,6 @@ class GamePlayRepository(
             _playerIsCurrentDescriptor.value = isDescriptor
             _playersTeamIsPlaying.value =
                 game.teams[game.currentRound.currentTeam].hasMember(username)
-
-            _playersTeamIsPlaying.value = !game.currentRound.roundOver
 
             // Words
             words = ArrayList()
@@ -287,14 +284,6 @@ class GamePlayRepository(
             }
         }
         return true
-    }
-
-    fun getUser(): LiveData<FirebaseUser?> {
-        return MutableLiveData<FirebaseUser?>().apply { value = auth.currentUser }
-    }
-
-    fun getUserNickName(): LiveData<String> {
-        return MutableLiveData<String>().apply { getUser().value.let { value = it?.displayName } }
     }
 
     companion object {

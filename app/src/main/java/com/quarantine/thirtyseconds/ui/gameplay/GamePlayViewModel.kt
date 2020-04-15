@@ -1,17 +1,21 @@
 package com.quarantine.thirtyseconds.ui.gameplay
 
+import android.app.Application
 import android.os.CountDownTimer
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.quarantine.thirtyseconds.R
 import com.quarantine.thirtyseconds.models.Message
 import com.quarantine.thirtyseconds.models.MessageType
 import com.quarantine.thirtyseconds.repositories.GamePlayRepository
 import com.quarantine.thirtyseconds.utils.Result
 
 class GamePlayViewModel(
+    private val context: Application,
+    private val gameKey: String? = null,
     private val repository: GamePlayRepository
-) : ViewModel() {
+) : AndroidViewModel(context) {
 
     private val _gameCreated = MutableLiveData<Result<Boolean>>()
     val gameCreated: MutableLiveData<Result<Boolean>>
@@ -49,7 +53,7 @@ class GamePlayViewModel(
 
                 override fun onFinish() {
                     timer = null
-                    repository.sendBotMessage("Time is up!")
+                    repository.sendBotMessage(context.getString(R.string.time_is_up))
                     repository.endRound()
                     repository.sendBotMessage(repository.getScores())
                     repository.newRound().addOnCompleteListener {
@@ -70,8 +74,7 @@ class GamePlayViewModel(
             )
             repository.sendMessage(message)
         } else {
-            repository.sendBotMessage("Descriptor typed one of the words in the card." +
-                    " Their team lost 1 point")
+            repository.sendBotMessage(context.getString(R.string.descriptor_gave_away_the_answer))
             repository.decrementScore()
         }
     }
