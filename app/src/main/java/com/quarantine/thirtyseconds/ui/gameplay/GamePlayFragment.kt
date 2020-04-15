@@ -89,7 +89,7 @@ class GamePlayFragment : Fragment() {
                 when (result) {
                     is Result.Success -> {
                         messagesAdapter.updateMessages(result.data)
-                        // messageList.smoothScrollToPosition(result.data.size - 1)
+                        messageList.smoothScrollToPosition(result.data.size - 1)
                     }
                     is Result.InProgress -> {
                         messagesAdapter.updateMessages(listOf())

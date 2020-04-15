@@ -18,9 +18,8 @@ class GamePlayRepository(
     private var gameStarted = false
     private var currentTeam = -1
     private var words = ArrayList<GameCard>()
+    private var messages = ArrayList<Message>()
 
-    var teamAPoints = 0
-    var teamBPoints = 0
     private val gamesReference = database.getReference("games")
     private var _key = "-M4siw7Rcv8vsXi4tLXg"
     private val key get() = _key
@@ -105,12 +104,14 @@ class GamePlayRepository(
             _timeLiveData.value = game.currentRound.timeRemaining
 
             // Messages
-            // TODO: Move messages out of here so that the RecyclerView stops scrolling when time changes
-            val messages = arrayListOf<Message>()
+            val newMessages = arrayListOf<Message>()
             for (message in game.messages.values) {
-                messages.add(message)
+                newMessages.add(message)
             }
-            _messagesLiveData.value = Result.Success(messages.sortedBy { it.timestamp })
+            if (messages != newMessages) {
+                messages = newMessages
+                _messagesLiveData.value = Result.Success(messages.sortedBy { it.timestamp })
+            }
         }
 
         override fun onCancelled(error: DatabaseError) {
@@ -173,7 +174,7 @@ class GamePlayRepository(
 
         // Get a new descriptor
         val descriptor = game.nextDescriptor(currentTeam)
-        sendBotMessage("It's ${game.teams[currentTeam]}'s turn. " +
+        sendBotMessage("It's ${game.teams[currentTeam].name}'s turn. " +
                 "$descriptor will be describing the words. " +
                 "Time started")
 
