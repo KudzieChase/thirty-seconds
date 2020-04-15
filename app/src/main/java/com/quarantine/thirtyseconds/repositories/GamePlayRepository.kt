@@ -8,7 +8,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.quarantine.thirtyseconds.models.*
-import com.quarantine.thirtyseconds.utils.DataSnapshotLiveData
 import com.quarantine.thirtyseconds.utils.Result
 
 class GamePlayRepository(
@@ -18,6 +17,7 @@ class GamePlayRepository(
     private var game = Game()
     private var gameStarted = false
     private var currentTeam = -1
+    private var words = ArrayList<GameCard>()
 
     var teamAPoints = 0
     var teamBPoints = 0
@@ -28,8 +28,6 @@ class GamePlayRepository(
     private val messageReference = gamesReference.child(key).child("messages")
     private val joinRequestsRef = gamesReference.child(key).child("joinRequests")
     private val roundReference = gamesReference.child(key).child("currentRound")
-    private val teamAScoreReference = gamesReference.child(key).child("teamA_score")
-    private val teamBScoreReference = gamesReference.child(key).child("teamB_score")
 
     // Which team is playing
     private val _playersTeamIsPlaying = MutableLiveData<Boolean>()
@@ -95,7 +93,7 @@ class GamePlayRepository(
             _playersTeamIsPlaying.value = !game.currentRound.roundOver
 
             // Words
-            val words = arrayListOf<GameCard>()
+            words = ArrayList()
             if (isDescriptor) {
                 for (word in game.currentRound.displayedWords.values) {
                     words.add(word)
@@ -202,37 +200,65 @@ class GamePlayRepository(
         roundReference.child("roundOver").setValue(true)
     }
 
-    fun incrementTeamAScore(points: Int): Task<Void> {
-        teamAPoints += points
-        return teamAScoreReference.setValue(teamAPoints)
+    fun incrementScore() {
+        val ref = gamesReference.child(key).child("teams")
+            .child("$currentTeam").child("score")
+        ref.runTransaction(object : Transaction.Handler {
+
+            override fun doTransaction(data: MutableData): Transaction.Result {
+                var currentScore = data.getValue(Int::class.java)
+                    ?: return Transaction.success(data)
+                data.value = ++currentScore
+                game.teams[currentTeam].score = currentScore
+                if (currentScore >= 34) {
+                    // TODO: End the game
+                }
+                return Transaction.success(data)
+            }
+
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                dataSnapshot: DataSnapshot?
+            ) {
+
+            }
+        })
     }
 
-    fun decrementTeamAScore(points: Int): Task<Void> {
-        teamAPoints -= points
-        return teamAScoreReference.setValue(teamAPoints)
+    fun decrementScore() {
+        val ref = gamesReference.child(key).child("teams")
+            .child("$currentTeam").child("score")
+        ref.runTransaction(object : Transaction.Handler {
+
+            override fun doTransaction(data: MutableData): Transaction.Result {
+                var currentScore = data.getValue(Int::class.java)
+                    ?: return Transaction.success(data)
+                // We cant have negative scores
+                if (currentScore > 0) {
+                    data.value = --currentScore
+                    game.teams[currentTeam].score = currentScore
+                }
+                return Transaction.success(data)
+            }
+
+            override fun onComplete(
+                error: DatabaseError?,
+                committed: Boolean,
+                dataSnapshot: DataSnapshot?
+            ) {
+
+            }
+        })
     }
 
-    fun incrementTeamBScore(points: Int): Task<Void> {
-        teamBPoints += points
-        return teamBScoreReference.setValue(teamBPoints)
-    }
-
-    fun decrementTeamBScore(points: Int): Task<Void> {
-        teamBPoints -= points
-        return teamBScoreReference.setValue(teamBPoints)
-    }
-
-    fun queryTeamAPoints(): DataSnapshotLiveData {
-        val query = teamAScoreReference
-        return DataSnapshotLiveData(query)
-    }
-
-    fun queryTeamBPoints(): DataSnapshotLiveData {
-        val query = teamBScoreReference
-        return DataSnapshotLiveData(query)
+    fun getScores(): String {
+        return "${game.teams[0].name} has ${game.teams[0].score} pts\n" +
+                "${game.teams[1].name} has ${game.teams[1].score} pts"
     }
 
     fun sendMessage(message: Message): Task<Void> {
+        message.senderNickname = auth.currentUser!!.displayName!!
         return messageReference.push().setValue(message.toMap())
     }
 
@@ -247,6 +273,19 @@ class GamePlayRepository(
 
     fun setTime(secondsRemaining: Int) {
         roundReference.child("timeRemaining").setValue(secondsRemaining)
+    }
+
+    fun descriptionIsValid(description: String): Boolean {
+        var expressionParts: List<String>
+        for (expression in words) {
+            expressionParts = expression.entry.split(" ")
+            for (word in expressionParts) {
+                if (description.contains(word, true)) {
+                    return false
+                }
+            }
+        }
+        return true
     }
 
     fun getUser(): LiveData<FirebaseUser?> {

@@ -2,7 +2,7 @@ package com.quarantine.thirtyseconds.models
 
 data class Team(
     val name: String = "",
-    val score: Int = 0,
+    var score: Int = 0,
     val members: ArrayList<String> = arrayListOf()
 ) {
     fun hasMember(username: String) = members.contains(username)

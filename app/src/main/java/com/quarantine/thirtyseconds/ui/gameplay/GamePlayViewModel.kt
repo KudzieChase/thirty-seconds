@@ -24,9 +24,6 @@ class GamePlayViewModel(
     val time = repository.timeLiveData
     var timeStarted = false
 
-    val currentUser = repository.getUser()
-    private val username = repository.getUserNickName()
-
     private var timer: CountDownTimer? = null
 
     init {
@@ -54,8 +51,7 @@ class GamePlayViewModel(
                     timer = null
                     repository.sendBotMessage("Time is up!")
                     repository.endRound()
-                    // TODO: Display the actual scores
-                    repository.sendBotMessage("Team A has x Score. Team B has y Score")
+                    repository.sendBotMessage(repository.getScores())
                     repository.newRound().addOnCompleteListener {
                         timeStarted = false
                     }
@@ -66,12 +62,18 @@ class GamePlayViewModel(
     }
 
     fun sendDescriptorMessage(messageText: String) {
-        val message = Message(
-            senderNickname = username.value!!,
-            message = messageText,
-            type = MessageType.DESCRIPTION
-        )
-        repository.sendMessage(message)
+        // Check if descriptor gave away the answer
+        if (repository.descriptionIsValid(messageText)) {
+            val message = Message(
+                message = messageText,
+                type = MessageType.DESCRIPTION
+            )
+            repository.sendMessage(message)
+        } else {
+            repository.sendBotMessage("Descriptor typed one of the words in the card." +
+                    " Their team lost 1 point")
+            repository.decrementScore()
+        }
     }
 
 }
