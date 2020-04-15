@@ -17,35 +17,20 @@ class GamePlayViewModel(
     val gameCreated: MutableLiveData<Result<Boolean>>
         get() = _gameCreated
 
-    private val _playerIsCurrentDescriptor = MutableLiveData<Boolean>()
-    val playerIsCurrentDescriptor: LiveData<Boolean>
-        get() = _playerIsCurrentDescriptor
-
-    private val _playersTeamIsPlaying = MutableLiveData<Boolean>()
-    val playersTeamIsPlaying: LiveData<Boolean>
-        get() = _playersTeamIsPlaying
-
+    val playerIsCurrentDescriptor: LiveData<Boolean> = repository.playerIsCurrentDescriptor
+    val playersTeamIsPlaying: LiveData<Boolean> = repository.playersTeamIsPlaying
     val messages = repository.messagesLiveData
     val words = repository.wordsLiveData
     val time = repository.timeLiveData
+    var timeStarted = false
 
     val currentUser = repository.getUser()
     private val username = repository.getUserNickName()
 
-    private fun getTimer() = object : CountDownTimer(30000, 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            repository.setTime((millisUntilFinished/1000).toInt())
-        }
-
-        override fun onFinish() {
-            // TODO: end round
-        }
-    }
+    private var timer: CountDownTimer? = null
 
     init {
         _gameCreated.value = Result.Success(false)
-        _playerIsCurrentDescriptor.value = repository.playerIsCurrentDescriptor
-        _playersTeamIsPlaying.value = repository.playersTeamIsPlaying
     }
 
     fun startNewGame() {
@@ -58,7 +43,25 @@ class GamePlayViewModel(
     }
 
     fun startTimer() {
-        getTimer().start()
+        timeStarted = true
+        if (timer == null) {
+            timer = object : CountDownTimer(31000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    repository.setTime((millisUntilFinished/1000).toInt())
+                }
+
+                override fun onFinish() {
+                    timer = null
+                    repository.sendBotMessage("Time is up!")
+                    repository.endRound()
+                    timeStarted = false
+                    // TODO: Display the actual scores
+                    repository.sendBotMessage("Team A has x Score. Team B has y Score")
+                    repository.newRound()
+                }
+            }
+        }
+        timer?.start()
     }
 
     fun sendDescriptorMessage(messageText: String) {

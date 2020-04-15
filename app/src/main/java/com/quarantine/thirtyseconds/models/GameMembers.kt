@@ -33,6 +33,14 @@ data class GameMembers(
         return memberWasAdded
     }
 
+    fun memberBelongsTo(username: String, team: Int): Boolean {
+        return if (team == 0) {
+            teamA.contains(username)
+        } else {
+            teamB.contains(username)
+        }
+    }
+
     private fun nextTeamADescriptor(): String {
         if (TEAM_A_DESCRIPTOR == teamA.size - 1) {
             TEAM_A_DESCRIPTOR = 0

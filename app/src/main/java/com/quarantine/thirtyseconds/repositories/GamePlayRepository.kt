@@ -19,9 +19,6 @@ class GamePlayRepository(
     private var gameStarted = false
     private var currentTeam = -1
 
-    var playerIsCurrentDescriptor = false
-    var playersTeamIsPlaying = false
-
     var teamAPoints = 0
     var teamBPoints = 0
     private val gamesReference = database.getReference("games")
@@ -33,6 +30,16 @@ class GamePlayRepository(
     private val roundReference = gamesReference.child(key).child("currentRound")
     private val teamAScoreReference = gamesReference.child(key).child("teamA_score")
     private val teamBScoreReference = gamesReference.child(key).child("teamB_score")
+
+    // Which team is playing
+    private val _playersTeamIsPlaying = MutableLiveData<Boolean>()
+    val playersTeamIsPlaying: LiveData<Boolean>
+        get() = _playersTeamIsPlaying
+
+    // Descriptor vs Interpreter
+    private val _playerIsCurrentDescriptor = MutableLiveData<Boolean>()
+    val playerIsCurrentDescriptor: LiveData<Boolean>
+        get() = _playerIsCurrentDescriptor
 
     // Words
     private val _wordsLiveData = MutableLiveData<List<GameCard>>()
@@ -64,8 +71,8 @@ class GamePlayRepository(
             if (members.size() >= 4 && !gameStarted) {
                 sendBotMessage("Game is starting with\n$members")
                 gameStarted = true
-                // TODO: Start a round
-
+                // Start a round
+                newRound()
             }
         }
         override fun onCancelled(p0: DatabaseError) { }
@@ -77,11 +84,22 @@ class GamePlayRepository(
     private val gameListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val game = dataSnapshot.getValue<Game>()!!
+            val username = auth.currentUser!!.displayName!!
+
+            // Current Round
+            val isDescriptor = game.currentRound.currentDescriptor == username
+            _playerIsCurrentDescriptor.value = isDescriptor
+            _playersTeamIsPlaying.value =
+                game.members.memberBelongsTo(username, game.currentRound.currentTeam)
+
+            _playersTeamIsPlaying.value = !game.currentRound.roundOver
 
             // Words
             val words = arrayListOf<GameCard>()
-            for (word in game.currentRound.displayedWords.values) {
-                words.add(word)
+            if (isDescriptor) {
+                for (word in game.currentRound.displayedWords.values) {
+                    words.add(word)
+                }
             }
             _wordsLiveData.value = words
 
@@ -89,11 +107,14 @@ class GamePlayRepository(
             _timeLiveData.value = game.currentRound.timeRemaining
 
             // Messages
+            // TODO: Move messages out of here
+            // so that the RecyclerView stops scrolling when
+            // the time changes
             val messages = arrayListOf<Message>()
             for (message in game.messages.values) {
                 messages.add(message)
             }
-            _messagesLiveData.value = Result.Success(messages)
+            _messagesLiveData.value = Result.Success(messages.sortedBy { it.timestamp })
         }
 
         override fun onCancelled(error: DatabaseError) {
@@ -114,6 +135,8 @@ class GamePlayRepository(
         _wordsLiveData.value = listOf()
         _timeLiveData.value = 0
         _messagesLiveData.value = Result.InProgress
+        _playersTeamIsPlaying.value = false
+        _playerIsCurrentDescriptor.value = false
     }
 
     fun newGame(): Task<Void> {
@@ -126,11 +149,10 @@ class GamePlayRepository(
             type = MessageType.GAMEBOT,
             timestamp = System.currentTimeMillis()
         )
-        members.addMember(auth.currentUser!!.displayName!!)
+        val username = auth.currentUser!!.displayName!!
+        members.addMember(username)
         game.members = members
-        playerIsCurrentDescriptor = true
-        playersTeamIsPlaying = true
-
+        game.currentRound.currentDescriptor = username
         // Wait for join requests and add them to the members list
         joinRequestsRef.addChildEventListener(joinEventListener)
         gamesReference.child(key).addValueEventListener(gameListener)
@@ -140,7 +162,7 @@ class GamePlayRepository(
     fun joinGame(gameKey: String) {
         _key = gameKey
         joinRequestsRef.child(gameKey).setValue(true)
-        playerIsCurrentDescriptor = false
+        _playerIsCurrentDescriptor.value = false
     }
 
     fun endGame(): Task<Void> {
@@ -159,7 +181,16 @@ class GamePlayRepository(
         roundReference.updateChildren(
             hashMapOf<String, Any>(
                 "currentDescriptor" to descriptor,
-                "currentTeam" to currentTeam
+                "currentTeam" to currentTeam,
+                "roundOver" to false,
+                // TODO: Load words from database, instead of using these
+                "displayedWords" to hashMapOf(
+                    "kendrick" to GameCard("Kendrick Lamar", true),
+                    "riri" to GameCard("Rihanna", true),
+                    "pc" to GameCard("PC", true),
+                    "car" to GameCard("Car", true),
+                    "harare" to GameCard("Harare", true)
+                )
             )
         )
 
@@ -167,10 +198,12 @@ class GamePlayRepository(
         sendBotMessage("It's Team $team's turn. " +
                 "$descriptor will be describing the words. " +
                 "Time started")
+    }
 
-        // Display the words
-        // Once the words are displayed, the fragment will start the timer
-
+    fun endRound() {
+        // Remove the displayed words
+        roundReference.child("displayedWords").setValue(null)
+        roundReference.child("roundOver").setValue(true)
     }
 
     fun incrementTeamAScore(points: Int): Task<Void> {
@@ -216,24 +249,8 @@ class GamePlayRepository(
         sendMessage(message)
     }
 
-    fun getWords(): LiveData<Result<List<GameCard>>> {
-        // TODO: Load the words from database
-        val wordsLiveData = MutableLiveData<Result<List<GameCard>>>()
-        wordsLiveData.value = Result.Success(
-            listOf(
-                GameCard("Kendrick Lamar", true),
-                GameCard("Rihanna", true),
-                GameCard("PC", true),
-                GameCard("Car", false),
-                GameCard("Harare", true)
-            )
-        )
-        return wordsLiveData
-    }
-
     fun setTime(secondsRemaining: Int) {
-        gamesReference.child(key).child("currentRound")
-            .child("timeRemaining").setValue(secondsRemaining)
+        roundReference.child("timeRemaining").setValue(secondsRemaining)
     }
 
     fun getUser(): LiveData<FirebaseUser?> {

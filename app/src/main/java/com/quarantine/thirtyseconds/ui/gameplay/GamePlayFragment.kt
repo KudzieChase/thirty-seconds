@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.quarantine.thirtyseconds.R
 import com.quarantine.thirtyseconds.databinding.FragmentGamePlayBinding
 import com.quarantine.thirtyseconds.utils.Result
 
@@ -48,6 +49,23 @@ class GamePlayFragment : Fragment() {
                 timeText.text = "$secondsRemaining"
             })
 
+            viewModel.playerIsCurrentDescriptor.observe(viewLifecycleOwner, Observer { isDescriptor ->
+                if (isDescriptor) {
+                    editTextChat.hint = getString(R.string.chat_box_hint)
+                } else {
+                    editTextChat.hint = getString(R.string.chat_box_hint_interpreter)
+                }
+            })
+
+            viewModel.playersTeamIsPlaying.observe(viewLifecycleOwner, Observer { isPlaying ->
+                // Disable chat if the other team is playing
+                editTextChat.isEnabled = isPlaying
+                btnSend.isEnabled = isPlaying
+                if (!isPlaying) {
+                    editTextChat.hint = getString(R.string.chat_box_disabled)
+                }
+            })
+
             viewModel.gameCreated.observe(viewLifecycleOwner, Observer { result ->
                 when (result) {
                     is Result.Success -> {
@@ -71,7 +89,7 @@ class GamePlayFragment : Fragment() {
                 when (result) {
                     is Result.Success -> {
                         messagesAdapter.updateMessages(result.data)
-                        messageList.smoothScrollToPosition(result.data.size - 1)
+                        // messageList.smoothScrollToPosition(result.data.size - 1)
                     }
                     is Result.InProgress -> {
                         messagesAdapter.updateMessages(listOf())
@@ -87,6 +105,9 @@ class GamePlayFragment : Fragment() {
 
             viewModel.words.observe(viewLifecycleOwner, Observer { words ->
                 wordsAdapter.submitList(words)
+                if (words.isNotEmpty() && !viewModel.timeStarted) {
+                    viewModel.startTimer()
+                }
             })
 
             btnSend.setOnClickListener {
