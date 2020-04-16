@@ -21,7 +21,7 @@ class GamePlayRepository(
 
     private val gamesReference = database.getReference("games")
     private var _key = "-M4siw7Rcv8vsXi4tLXg"
-    private val key get() = _key
+    val key get() = _key
 
     private val messageReference = gamesReference.child(key).child("messages")
     private val joinRequestsRef = gamesReference.child(key).child("joinRequests")
@@ -68,7 +68,7 @@ class GamePlayRepository(
                 sendBotMessage("Game is starting with\n${game.teamsString()}")
                 gameStarted = true
                 // Start the first round
-                newRound()
+                newRound("Team A is playing. You are describing", auth.currentUser!!.uid!!)
             }
         }
         override fun onCancelled(p0: DatabaseError) { }
@@ -133,13 +133,12 @@ class GamePlayRepository(
         _playerIsCurrentDescriptor.value = false
     }
 
-    fun newGame(): Task<Void> {
+    fun newGame(botMessage: String): Task<Void> {
         //Creates a new game
         game = Game()
         game.messages[messageReference.push().key!!] = Message(
             senderNickname = "gamebot",
-            message = "You've created a new game. Invite your friends" +
-                    " using the code " + key, // TODO: Use string resource instead
+            message = botMessage,
             type = MessageType.GAMEBOT,
             timestamp = System.currentTimeMillis()
         )
@@ -165,15 +164,15 @@ class GamePlayRepository(
         return gamesReference.child(key).child("gameOver").setValue(true)
     }
 
-    fun newRound(): Task<Void> {
+    fun getNextDescriptor() = game.nextDescriptor(currentTeam)
+
+    fun getCurrentTeamName() = game.teams[currentTeam].name
+
+    fun newRound(botMessage: String, descriptor: String): Task<Void> {
         // Change teams
         currentTeam = if (currentTeam == -1 || currentTeam == 1) { 0 } else { 1 }
 
-        // Get a new descriptor
-        val descriptor = game.nextDescriptor(currentTeam)
-        sendBotMessage("It's ${game.teams[currentTeam].name}'s turn. " +
-                "$descriptor will be describing the words. " +
-                "Time started")
+        sendBotMessage(botMessage)
 
         return roundReference.updateChildren(
             hashMapOf<String, Any>(
@@ -250,10 +249,9 @@ class GamePlayRepository(
         })
     }
 
-    fun getScores(): String {
-        return "${game.teams[0].name} has ${game.teams[0].score} pts\n" +
-                "${game.teams[1].name} has ${game.teams[1].score} pts"
-    }
+    fun getTeamA() = game.teams[0]
+
+    fun getTeamB() = game.teams[1]
 
     fun sendMessage(message: Message): Task<Void> {
         message.senderNickname = auth.currentUser!!.displayName!!

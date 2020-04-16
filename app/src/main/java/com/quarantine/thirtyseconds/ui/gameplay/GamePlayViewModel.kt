@@ -36,11 +36,12 @@ class GamePlayViewModel(
 
     fun startNewGame() {
         _gameCreated.value = Result.InProgress
-        repository.newGame().addOnSuccessListener {
-            _gameCreated.value = Result.Success(true)
-        }.addOnFailureListener {
-            _gameCreated.value = Result.Error(it)
-        }
+        repository.newGame(context.getString(R.string.game_created, repository.key))
+            .addOnSuccessListener {
+                _gameCreated.value = Result.Success(true)
+            }.addOnFailureListener {
+                _gameCreated.value = Result.Error(it)
+            }
     }
 
     fun startTimer() {
@@ -55,10 +56,22 @@ class GamePlayViewModel(
                     timer = null
                     repository.sendBotMessage(context.getString(R.string.time_is_up))
                     repository.endRound()
-                    repository.sendBotMessage(repository.getScores())
-                    repository.newRound().addOnCompleteListener {
-                        timeStarted = false
-                    }
+                    val teamA = repository.getTeamA()
+                    val teamB = repository.getTeamB()
+                    repository.sendBotMessage(context.getString(
+                        R.string.bot_announce_scores, teamA.name, teamA.score,
+                        teamB.name, teamB.score
+                    ))
+                    val newDescriptor = repository.getNextDescriptor()
+                    repository.newRound(
+                            context.getString(
+                                R.string.bot_announce_descriptor,
+                                repository.getCurrentTeamName(),
+                                newDescriptor
+                            ), newDescriptor)
+                        .addOnCompleteListener {
+                            timeStarted = false
+                        }
                 }
             }
         }

@@ -26,4 +26,7 @@
     <string name="time_is_up">Time is Up!</string>
     <string name="descriptor_gave_away_the_answer">Descriptor typed one of the words in the card.
         Their team lost 1 point</string>
+    <string name="game_created">You have created a new game. Invite your friends using the code %s</string>
+    <string name="bot_announce_descriptor">%s is playing. %s will be describing the words. Time Started</string>
+    <string name="bot_announce_scores">%s has %d points. %s has %d points</string>
 </resources>
