@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.quarantine.thirtyseconds.databinding.ItemReceivedMessageBinding
 import com.quarantine.thirtyseconds.databinding.ItemSentMessageBinding
 import com.quarantine.thirtyseconds.models.Message
+import com.quarantine.thirtyseconds.models.MessageType
 import java.lang.IllegalArgumentException
 
 class MessagesAdapter(private var messages: List<Message>) :
@@ -51,6 +52,14 @@ class MessagesAdapter(private var messages: List<Message>) :
             VIEW_TYPE_RECEIVED -> {
                 (holder as ReceivedMessagesHolder).bind(message)
             }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val message = messages[position]
+        return when (message.type) {
+            MessageType.DESCRIPTION -> VIEW_TYPE_SENT
+            else -> VIEW_TYPE_RECEIVED
         }
     }
 
