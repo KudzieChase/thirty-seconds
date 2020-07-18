@@ -3,8 +3,8 @@ package com.quarantine.thirtyseconds.models
 import androidx.recyclerview.widget.DiffUtil
 
 data class GameCard(
-    val entry: String,
-    val isActive: Boolean
+    val entry: String = "",
+    val active: Boolean = false
 )
 
 object GameCardDiff : DiffUtil.ItemCallback<GameCard>() {

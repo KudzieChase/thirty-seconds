@@ -9,6 +9,8 @@
     <string name="username">Username</string>
     <string name="home">Home</string>
     <string name="chat_box_hint">Enter description of word here.</string>
+    <string name="chat_box_hint_interpreter">Take a guess</string>
+    <string name="chat_box_disabled">The other team is playing. Please wait</string>
     <string name="send_button">Send Button</string>
     <string name="round">Round</string>
     <string name="game_over">Game Over</string>
@@ -20,4 +22,11 @@
     <string name="photo_uploaded">Profile picture changed</string>
     <string name="tutorial">Tutorial</string>
     <string name="rules_headline">You know the rules. And so do I.</string>
+
+    <string name="time_is_up">Time is Up!</string>
+    <string name="descriptor_gave_away_the_answer">Descriptor typed one of the words in the card.
+        Their team lost 1 point</string>
+    <string name="game_created">You have created a new game. Invite your friends using the code %s</string>
+    <string name="bot_announce_descriptor">%s is playing. %s will be describing the words. Time Started</string>
+    <string name="bot_announce_scores">%s has %d points. %s has %d points</string>
 </resources>
